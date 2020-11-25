@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
 {
@@ -16,10 +20,19 @@ class BlogController extends AbstractController
     /**
      * @Route("/blog", name="blog")
      */
-    public function index(): Response
+    public function index(ArticleRepository $repo): Response
     {
+        // On appelle la classe Repository de la classe Article
+        // Une classe Repository permet uiquement de sélectionner des données en BDD
+        // $repo = $this->getDoctrine()->getRepository(Article::class);
+        // dump($repo);
+
+        // findAll() est une méthode issue de la classe ArticleRepository et permet de sélectionner l'ensemble d'une table SQL (SELECT * FROM)
+        $articles = $repo->findAll();
+        dump($articles);
+
         return $this->render('blog/index.html.twig', [
-            'controller_name' => 'BlogController',
+            'articles' => $articles // On envoie sur le template, les articles sélectionnés en BDD
         ]);
     }
 
@@ -34,11 +47,51 @@ class BlogController extends AbstractController
         ]);
     }
 
+    
     /**
-     * @Route("/blog/12", name="blog_show")
+     * @Route("/blog/new", name="blog_create")
      */
-    public function show(): Response
+    public function create(Request $request, EntityManagerInterface $manager)
     {
-        return $this->render('blog/show.html.twig');
+        dump($request);
+
+        if($request->request->count() > 0)
+        {
+            $article = new Article;
+            $article->setTitle($request->request->get('title'))
+                    ->setContent($request->request->get('content'))
+                    ->setImage($request->request->get('image'))
+                    ->setCreatedAt(new \DateTime());
+
+            $manager->persist($article);
+            $manager->flush();
+
+            return $this->redirectToRoute('blog_show', [
+                'id' => $article->getId()
+            ]);
+
+        }
+
+        return $this->render('blog/create.html.twig');
     }
+
+    // Nous utilisons le concept de route paramétrée pour faire en sorte de récupérer le bon ID du bon article
+    // Nous avons définit le paramètre de type {id} directement dans la route
+
+    /**
+     * @Route("/blog/{id}", name="blog_show")
+     */
+    public function show(Article $article): Response
+    {
+        // On appelle le repository de la classe Article afin de sélectionner dans la table Article
+        // $repo = $this->getDoctrine()->getRepository(Article::class);
+
+        // La méthode find() issue de la classe ArticleRepository permet de sélectionner un article en BDD en fonction de son ID
+        // $article = $repo->find($id);
+
+        return $this->render('blog/show.html.twig', [
+            'article' => $article // On envoie sur le templat l'article sélectionné en BDD
+        ]);
+    }
+
 }
