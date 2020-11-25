@@ -1,0 +1,17 @@
+{# On hérite de notre template de base 'base.html.twig' #}
+{% extends "base.html.twig" %}
+
+{# On fait appel au block 'body' du fichier 'base.html.twig' #}
+{% block body %}
+
+<h1 class="display-4 text-center my-4">{{ title }}</h1>
+
+{% if age > 18 %}
+<p>Vous êtes majeur</p>
+{% else %}
+<p>Vous êtes mineur</p>
+{% endif %}
+
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi omnis voluptate autem placeat dolorem, at tenetur cumque fugiat officiis iste iure ad esse necessitatibus ea ab nesciunt sint nihil commodi.</p>
+
+{% endblock %}
