@@ -20,7 +20,7 @@
                     <div class="btn-group">
                         <a href="{{ path('blog_show', {'id': data.id })}}" class="btn btn-dark">Voir plus</a>
                     </div>
-                    <small class="text-muted">{{ data.createdAt | date('d/m/Y') }}</small>
+                    <small class="text-muted">{{ data.createdAt | date('d/m/Y') }} à {{ data.createdAt | date('H:i:s') }}</small>
                 </div>
             </div>
         </div>
