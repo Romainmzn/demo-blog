@@ -24,10 +24,10 @@
 
     {{ form_start(formArticle, {'attr': {'class':'col-md-7 mx-auto'}}) }}
 
-        {{ form_row(formArticle.title, {'attr': {'placeholder': "Titre de l'article"}}) }}
-        {{ form_row(formArticle.content, {'attr': {'placeholder': "Contenu de l'article", 'rows':15}}) }}
-        {{ form_row(formArticle.image, {'attr': {'placeholder': "URL de l'image"}}) }}
-
+        {{ form_row(formArticle.title, { 'attr': {'placeholder': "Titre de l'article", 'title':"entre 2 et 50 caractères"}, 'label': "Titre de l'article" }) }}
+        {{ form_row(formArticle.category, {'label': "Catégorie"}) }}
+        {{ form_row(formArticle.content, {'attr': {'placeholder': "Contenu de l'article", 'rows':15}, 'label':"Contenu de l'article" }) }}
+        {{ form_row(formArticle.image, {'attr': {'placeholder': "URL de l'image"}, 'label': "URL de l'image"}) }}
         
         <button type="submit" class="btn btn-primary">
         {# editMode est une variable issue du controller #}
