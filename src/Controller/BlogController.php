@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\ArticleType;
+use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -137,8 +139,35 @@ class BlogController extends AbstractController
     /**
      * @Route("/blog/{id}", name="blog_show")
      */
-    public function show(Article $article): Response
+    public function show(Article $article, Request $commentRequest, EntityManagerInterface $commentManager): Response
     {
+
+        $comment = new Comment;
+
+        $commentForm = $this->createForm(CommentType::class, $comment);
+
+        $commentForm->handleRequest($commentRequest);
+
+        dump($commentRequest);
+
+        if($commentForm->isSubmitted() && $commentForm->isValid())
+        {
+            $comment->setCreatedAt(new \DateTime())
+                    ->setArticle($article);
+
+            $commentManager->persist($comment);
+            $commentManager->flush();
+
+            $this->addFlash('success', "Le commentaire a bien été posté !");
+
+            return $this->redirectToRoute('blog_show', [
+                'id' => $article->getId()
+            ]);
+        }
+
+      
+
+
         // On appelle le repository de la classe Article afin de sélectionner dans la table Article
         // $repo = $this->getDoctrine()->getRepository(Article::class);
 
@@ -146,7 +175,8 @@ class BlogController extends AbstractController
         // $article = $repo->find($id);
 
         return $this->render('blog/show.html.twig', [
-            'article' => $article // On envoie sur le template l'article sélectionné en BDD
+            'article' => $article, // On envoie sur le template l'article sélectionné en BDD
+            'commentForm' => $commentForm->createView()
         ]);
     }
 
