@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mon block Symfony | Identifiez-vous{% endblock %}
+
+{% block body %}
+
+    <h1 class="display-4 text-center my-4">Identifiez-vous</h1>
+
+    {# error est une variable twig qui provient du controller SecurityController et qui contient un message d'erreur en cas de mauvaise connexion #}
+    {% if error %}
+        <p class="bg-danger text-white text-center p-2 col-4 mx-auto rounded">
+            {{ error.messageKey | trans(error.messageData, 'security') }}
+            {# trans(error.messageData, 'scurity') : permet de pointer sur le fichier 'translations/security.en.php' qui contient la personnalisation des messages utilisateurs par défaut de Symfony #}
+        </p>
+        
+    {% endif %}
+
+    {# Les attributs name doivent être impérativement _username et _password car Symfony fait le travail pour nous si on les nomme ainsi #}
+    <form method="post" action="{{ path('security_login') }}" class="col-5 mx-auto text-center">
+        <div class="form-group">
+            <label for="_username">E-mail</label>
+            <input type="text" class="form-control" id="_username" name="_username" value="{{ last_username }}">
+        </div>
+        <div class="form-group">
+            <label for="_password">Mot de passe</label>
+            <input type="password" class="form-control" id="_password" name="_password">
+        </div>
+        <input type="submit" class="btn btn-dark" value="Connexion">
+    </form>
+    
+{% endblock %}
