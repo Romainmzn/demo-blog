@@ -4,6 +4,48 @@
 
 {% block body %}
 
-<h1 class="display-4"></h1>
+<h1 class="display-4 text-center my-3">Gestion des articles | <small><a href="{{ path('admin_new_article') }}" class="btn btn-dark btn-sm">Nouvel article</a></small></h1>
+
+
+{% for message in app.flashes('success') %}
+    <div class="bg-success text-white text-center col-4 mx-auto rounded p-3">{{ message }}</div>
+{% endfor %}
+
+<table class="table table-hover text-center">
+
+    <tr>
+    {% for titre in titres %}
+
+        {% if titre == 'createdAt' %}<th>Date de création</th>
+        
+        {% else %}<th>{{ titre }}</th>
+            
+        {% endif %}
+        
+    {% endfor %}
+    <th>Catégorie</th>
+    <th>Modification</th>
+    <th>Suppression</th>
+
+    </tr>
+
+    {% for article in articles %}
+
+    <tr>
+        <td>{{ article.id }}</td>
+        <td>{{ article.title }}</td>
+        <td>{{ article.content | striptags | slice(0,100)}}...</td>
+        <td>{{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i:s') }}</td>
+        <td><img src="{{ article.image }}" style="height:100px; width:100px"</td>
+        <td>{{ article.category.title }}</td>
+        <td><a href="{{ path('admin_edit_article', {'id': article.id}) }}" class="btn btn-warning"><i class="far fa-edit text-white"></i></a></td>
+		<td><a href="" class="btn btn-danger"><i class="fas fa-trash-alt text-white"></i></a></td>
+
+    </tr>
+        
+    {% endfor %}
+
+
+</table>
 
 {% endblock %}
