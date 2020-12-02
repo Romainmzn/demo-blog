@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back office | Création d'un article{% endblock %}
+
+{% block body %}
+
+<h1 class="display-4 text-center">Création d'un article</h1>
+
+{{ form_start(adminCreateForm, {'attr': {'class':'col-7 mx-auto'}}) }}
+
+{{ form_row(adminCreateForm.title, {'attr': {'placeholder':"Indiquez le titre..."}, 'label': "Titre de l'article"}) }}
+{{ form_row(adminCreateForm.category, {'label': "Contenu de l'article"}) }}
+{{ form_row(adminCreateForm.content, {'attr': {'placeholder':"Indiquez le contenu de l'article...", 'rows':10}, 'label': "Contenu de l'article"}) }}
+{{ form_row(adminCreateForm.image, {'attr': {'placeholder':"Indiquez l'URL..."}, 'label': "Image de l'article"}) }}
+<button type="submit" class="btn btn-dark">
+{% if editMode %}Modifier l'article
+{% else %}Enregistrer l'article
+{% endif %}
+</button>
+
+{{ form_end(adminCreateForm) }}
+
+{% endblock %}

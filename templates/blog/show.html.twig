@@ -4,6 +4,8 @@
 
 {% block body %}
 
+<div class="container">
+
 <h1 class="display-4 text-center my-4">Détail de l'article</h1>
 
 <div class="col-12">
@@ -14,43 +16,52 @@
             <p class="card-text">{{ article.content | raw }}</p>
             <div class="d-flex justify-content-between align-items-center">
                 <small class="text-muted ml-2 mb-2">Publié le : {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i:s') }} dans la catégorie <strong>{{ article.category.title }}</strong></small>
+
+                {% if is_granted('ROLE_ADMIN') %}
                 <small><a class="btn btn-dark mr-2 mb-2" href="{{ path('blog_edit', {'id': article.id }) }}">Edit</a></small>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
 
-<h5 class="text-center">Commenter cet article</h5>
+<h5 class="text-center my-3">Commenter cet article</h5>
 
-{% for message in app.flashes('success') %}
+{% if app.user %}
+    
+    {% for message in app.flashes('success') %}
 
-<div class="col-5 bg-success p-3 rounded mx-auto text-center text-white">
-{{ message }}
-</div>
-{% endfor %}
-
-{{ form_start(commentForm)}}
-
-<div class="row p-3">
-    <div class="col-2">
-        {{ form_row(commentForm.author, {'attr': {'placeholder':'Auteur'}, 'label': false})}}
+    <div class="col-5 bg-success p-3 rounded mx-auto text-center text-white">
+    {{ message }}
     </div>
-    <div class="col-8">
-        {{ form_row(commentForm.content, {'attr': {'placeholder':'Votre commentaire...'}, 'label': false})}}
+    {% endfor %}
+
+    {{ form_start(commentForm)}}
+
+    <div class="row p-3">
+        {# <div class="col-2">
+            {{ form_row(commentForm.author, {'attr': {'placeholder':'Auteur'}, 'label': false})}}
+        </div> #}
+        <div class="col-10">
+            {{ form_row(commentForm.content, {'attr': {'placeholder':'Votre commentaire...'}, 'label': false})}}
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-dark">Poster le commentaire</button>
+        </div>
     </div>
-    <div class="col-2">
-        <button type="submit" class="btn btn-dark">Poster le commentaire</button>
-    </div>
-</div>
-<hr>
+    <hr>
 
+    {{ form_end(commentForm)}}
 
-{{ form_end(commentForm)}}
+    {% else %}
 
+    <p class="text-center my-3"><a href="{{ path('security_login') }}">Connectez-vous</a> pour laisser un commentaire</p>
+    <hr>
 
+{% endif %}
 
-{% for comment in article.comments %}
+{% for comment in article.comments | reverse %}
 
 <div class="row ">
     <div class="col-3">
@@ -63,5 +74,7 @@
 <hr>
     
 {% endfor %}
+
+</div>
     
 {% endblock %}
