@@ -1,10 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Back office | Création d'un article{% endblock %}
+{% block title %}Back office | 
+{% if editMode %}Modification d'un article
+{% else %}Création d'un article
+{% endif %}
+{% endblock %}
 
 {% block body %}
 
-<h1 class="display-4 text-center">Création d'un article</h1>
+<h1 class="display-4 text-center">
+{% if editMode %}Modification d'un article
+{% else %}Création d'un article
+{% endif %}
+</h1>
 
 {{ form_start(adminCreateForm, {'attr': {'class':'col-7 mx-auto'}}) }}
 

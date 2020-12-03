@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back office | Gestion des catégories{% endblock %}
+
+{% block body %}
+
+<h1 class="display-4 text-center my-3">Gestion des catégories | <small><a href="{{ path('admin_create_category') }}" class="btn btn-dark btn-sm">Nouvelle catégorie</a></small></h1>
+
+{% for label, messages in app.flashes(['danger', 'success']) %}
+
+    {% for message in messages %}
+
+        <div class="bg-{{ label }} text-white text-center col-4 mx-auto rounded p-3">{{ message }}</div>
+
+    {% endfor %}
+    
+{% endfor %}
+
+<table class="table table-hover text-center">
+<tr>
+{% for titre in titres %}
+    <th>{{ titre | upper }}</th>
+{% endfor %}
+    <th>Nb d'articles</th>
+    <th>Modification</th>
+    <th>Suppression</th>
+</tr>
+{% for category in categories %}
+<tr>
+    <td>{{ category.id }}</td>
+    <td>{{ category.title }}</td>
+    <td>{{ category.description }}</td>
+    <td>{{ category.articles | length }}</td>
+    <td><a href="{{ path('admin_edit_category', {'id': category.id }) }}" class="btn btn-warning"><i class="far fa-edit text-white"></i></a></td>
+	<td><a href="{{ path('admin_delete_category', {'id': category.id }) }}" class="btn btn-danger" onclick="return(confirm('Voulez-vous vraiment supprimer cette catégorie ?'))"><i class="fas fa-trash-alt text-white"></i></a></td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

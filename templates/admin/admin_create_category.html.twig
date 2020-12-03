@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back office | 
+{% if editMode %}Mofication d'une catégorie
+{% else %}Création d'une catégorie
+{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<h1 class="display-4 text-center">
+{% if editMode %}Mofication d'une catégorie
+{% else %}Création d'une catégorie
+{% endif %}
+<small><a href="{{ path('admin_categories') }}" class="btn btn-dark btn-sm">Retour</a></small>
+</h1>
+
+{{ form_start(categoryForm, {'attr': {'class':'col-7 mx-auto'}} ) }}
+{{ form_row(categoryForm.title) }}
+{{ form_row(categoryForm.description) }}
+<button type="submit" class="btn btn-dark">
+{% if editMode %}Modifier la catégorie
+{% else %}Créer la catégorie
+{% endif %}
+</button>
+{{ form_end(categoryForm)}}
+
+{% endblock %}
