@@ -39,7 +39,7 @@
         <td><img src="{{ article.image }}" style="height:100px; width:100px"</td>
         <td>{{ article.category.title }}</td>
         <td><a href="{{ path('admin_edit_article', {'id': article.id}) }}" class="btn btn-warning"><i class="far fa-edit text-white"></i></a></td>
-		<td><a href="" class="btn btn-danger"><i class="fas fa-trash-alt text-white"></i></a></td>
+		<td><a href="{{ path('admin_delete_article', {'id': article.id}) }}" class="btn btn-danger" onclick="return(confirm('Voulez-vous vraiment supprimer cet article ?'))"><i class="fas fa-trash-alt text-white"></i></a></td>
 
     </tr>
         
